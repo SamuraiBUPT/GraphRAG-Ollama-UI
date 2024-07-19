@@ -24,3 +24,6 @@ plotly
 kaleido
 graphrag
 tomlkit
+azure-identity
+azure-storage-blob
+chardet

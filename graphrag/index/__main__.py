@@ -4,8 +4,12 @@
 """The Indexing Engine package root."""
 
 import argparse
+import sys
+import io
 
 from .cli import index_cli
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')  # modify
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

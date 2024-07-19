@@ -33,12 +33,18 @@ class EntityExtractionConfig(LLMConfig):
     def resolved_strategy(self, root_dir: str, encoding_model: str) -> dict:
         """Get the resolved entity extraction strategy."""
         from graphrag.index.verbs.entities.extraction import ExtractEntityStrategyType
-
+        
+        try:
+            with open(Path(root_dir) / self.prompt, "r", encoding="utf-8") as f:
+                extraction_prompt = f.read()
+        except Exception as e:
+            return {"Error": e}
+        
         return self.strategy or {
             "type": ExtractEntityStrategyType.graph_intelligence,
             "llm": self.llm.model_dump(),
             **self.parallelization.model_dump(),
-            "extraction_prompt": (Path(root_dir) / self.prompt).read_text()
+            "extraction_prompt": extraction_prompt
             if self.prompt
             else None,
             "max_gleanings": self.max_gleanings,

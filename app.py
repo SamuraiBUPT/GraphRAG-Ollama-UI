@@ -26,6 +26,7 @@ import sys
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, project_root)
 
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')  # modify
 
 # Set up logging
 log_queue = queue.Queue()
@@ -94,7 +95,7 @@ def index_graph(progress=gr.Progress()):
     output_queue = queue.Queue()
     
     def run_command_with_output():
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf-8')
         for line in iter(process.stdout.readline, ''):
             output_queue.put(line)
         process.stdout.close()
@@ -922,4 +923,4 @@ demo = demo.queue()
 
 
 if __name__ == "__main__":
-    demo.launch(share=True, reload=False)
+    demo.launch(share=True)
